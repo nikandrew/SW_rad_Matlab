@@ -18,6 +18,8 @@ function [ output ] = RadDecoderFull( input, old_buffer, old_step, old_number, o
     dop3_0_number = 55;
     dop3_0_count = 55;
     dop3_0_value = 55;
+    
+    
     for number_time = 1:7
         if(error == 0) 
             if(old_input == input(number_time))
@@ -523,7 +525,6 @@ function [ output ] = RadDecoderFull( input, old_buffer, old_step, old_number, o
             else
                 dop2_3_number = dop2_3_number - 1;
             end
-            dop2_3_error = 0;
             switch dop2_0_step
                 case 4  
                     step(1) = 4;
@@ -587,12 +588,16 @@ function [ output ] = RadDecoderFull( input, old_buffer, old_step, old_number, o
                 dop3_3_value = g1(4);
                 dop3_3_input = input(number_time);
                 dop3_3_count = 3 - dop3_3_number;
+                dop3_3_error = 0;
             elseif(g2(3) == 0)
                 dop3_3_buffer = g2(1);                
                 dop3_3_step = step(2);
                 dop3_3_value = g2(4);
                 dop3_3_input = input(number_time);
                 dop3_3_count = 3 - dop3_3_number;
+                dop3_3_error = 0;
+            else
+                dop3_3_error = 1;
             end
             error = 4;
         elseif(error == 4) 

@@ -18,6 +18,8 @@ function [ output ] = RadDecoderFull( input, old_buffer, old_step, old_number, o
     dop3_0_number = 55;
     dop3_0_count = 55;
     dop3_0_value = 55;
+    
+    
     for number_time = 1:7
         if(error == 0) 
             if(old_input == input(number_time))
@@ -546,12 +548,14 @@ function [ output ] = RadDecoderFull( input, old_buffer, old_step, old_number, o
                 dop2_3_value = g1(4);
                 dop2_3_input = input(number_time);
                 dop2_3_count = 3 - dop2_3_number;
+                dop2_3_error = 0;
             elseif(g2(3) == 0)
                 dop2_3_buffer = g2(1);            
                 dop2_3_step = step(2);
                 dop2_3_value = g2(4);
                 dop2_3_input = input(number_time);
                 dop2_3_count = 3 - dop2_3_number;
+                dop2_3_error = 0;
             else
                 dop2_3_error = 1;
             end
@@ -746,8 +750,82 @@ function [ output ] = RadDecoderFull( input, old_buffer, old_step, old_number, o
                         output(5,number_time-2) = 03;
                     end
                 end  
-            
+            else
+                dop3_run = 1;
+                old_number = dop3_3_number;
+                if old_number == 1
+                    old_number = 3;
+                else
+                    old_number = old_number - 1;
+                end
+                switch dop3_3_step
+                    case 4  
+                        step(1) = 4;
+                        step(2) = 3;
+                    case 3  
+                        step(1) = 2;
+                        step(2) = 1;
+                    case 2  
+                        step(1) = 4;
+                        step(2) = 3;
+                    case 1  
+                        step(1) = 2;
+                        step(2) = 1;
+                end 
+                g1 = ValueGen(step(1), input(number_time), old_number, dop3_3_buffer);        
+                g2 = ValueGen(step(2), input(number_time), old_number, dop3_3_buffer);
+                if(g1(3) == 0) 
+                    old_buffer = g1(1);
+                    old_step = step(1);
+                    old_value = g1(4);
+                    old_input = input(number_time);
+                    old_count = 3 - old_number;
 
+                    %Вывод
+                    output(1,number_time) = old_count;
+                    output(2,number_time) = old_value;
+                    output(3,number_time) = old_buffer;
+                    output(4,number_time) = old_input;
+                    output(5,number_time) = 43;
+
+                    output(1,number_time-1) = dop3_3_count;
+                    output(2,number_time-1) = dop3_3_value;
+                    output(3,number_time-1) = dop3_3_buffer;
+                    output(4,number_time-1) = dop3_3_input;
+                    output(5,number_time-1) = 33;
+
+                    output(1,number_time-2) = dop3_0_count;
+                    output(2,number_time-2) = dop3_0_value;
+                    output(3,number_time-2) = dop3_0_buffer;
+                    output(4,number_time-2) = dop3_0_input;
+                    output(5,number_time-2) = 03;
+                elseif(g2(3) == 0)
+                    old_buffer = g2(1);                
+                    old_step = step(2);
+                    old_value = g2(4);
+                    old_input = input(number_time);
+                    old_count = 3 - old_number;
+
+                    %Вывод
+                    output(1,number_time) = old_count;
+                    output(2,number_time) = old_value;
+                    output(3,number_time) = old_buffer;
+                    output(4,number_time) = old_input;
+                    output(5,number_time) = 43;
+
+                    output(1,number_time-1) = dop3_3_count;
+                    output(2,number_time-1) = dop3_3_value;
+                    output(3,number_time-1) = dop3_3_buffer;
+                    output(4,number_time-1) = dop3_3_input;
+                    output(5,number_time-1) = 33;
+
+                    output(1,number_time-2) = dop3_0_count;
+                    output(2,number_time-2) = dop3_0_value;
+                    output(3,number_time-2) = dop3_0_buffer;
+                    output(4,number_time-2) = dop3_0_input;
+                    output(5,number_time-2) = 03;
+                end  
+            end
             error = 0;
         end
 
